@@ -13,7 +13,7 @@ import java.util.*;
 @Service
 public class BeerServiceImpl implements BeerService {
 
-    private Map<UUID, Beer> beerMap;
+    private final Map<UUID, Beer> beerMap;
 
     public BeerServiceImpl() {
         this.beerMap = new HashMap<>();
@@ -24,7 +24,7 @@ public class BeerServiceImpl implements BeerService {
                 .beerName("Galaxy Cat")
                 .beerStyle(BeerStyle.PALE_ALE)
                 .upc("12356")
-                .price(new BigDecimal(12.99))
+                .price(new BigDecimal("12.99"))
                 .quantityOnHand(122)
                 .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
@@ -36,7 +36,7 @@ public class BeerServiceImpl implements BeerService {
                 .beerName("Crank")
                 .beerStyle(BeerStyle.PALE_ALE)
                 .upc("12356222")
-                .price(new BigDecimal(11.99))
+                .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
                 .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
@@ -48,7 +48,7 @@ public class BeerServiceImpl implements BeerService {
                 .beerName("Sunshine City")
                 .beerStyle(BeerStyle.IPA)
                 .upc("12356")
-                .price(new BigDecimal(13.99))
+                .price(new BigDecimal("13.99"))
                 .quantityOnHand(144)
                 .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
