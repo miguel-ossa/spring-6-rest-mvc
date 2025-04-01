@@ -1,5 +1,6 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
+import guru_springframework.spring_6_rest_mvc.model.Beer;
 import guru_springframework.spring_6_rest_mvc.model.Customer;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface CustomerService {
     void updateCustomerById(UUID customerId, Customer customer);
 
     void deleteById(UUID customerId);
+
+    void patchCustomerById(UUID customerId, Customer customer);
 }
