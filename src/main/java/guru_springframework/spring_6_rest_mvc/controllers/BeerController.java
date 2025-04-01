@@ -4,6 +4,7 @@ import guru_springframework.spring_6_rest_mvc.model.Beer;
 import guru_springframework.spring_6_rest_mvc.services.BeerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,14 @@ import java.util.UUID;
 @RequestMapping("api/v1/beer")
 public class BeerController {
     private final BeerService beerService;
+
+    @PutMapping("{beerId}")
+    public ResponseEntity updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+
+        beerService.updateBeerById(beerId, beer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     @PostMapping
     //@RequestMapping(method = RequestMethod.POST)
