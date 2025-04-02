@@ -1,6 +1,5 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
-import guru_springframework.spring_6_rest_mvc.model.Beer;
 import guru_springframework.spring_6_rest_mvc.model.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

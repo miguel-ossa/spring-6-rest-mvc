@@ -1,6 +1,5 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
-import guru_springframework.spring_6_rest_mvc.model.Beer;
 import guru_springframework.spring_6_rest_mvc.model.Customer;
 
 import java.util.List;
