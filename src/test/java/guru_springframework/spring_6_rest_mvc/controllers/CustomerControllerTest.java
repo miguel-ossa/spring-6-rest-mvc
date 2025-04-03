@@ -56,7 +56,6 @@ class CustomerControllerTest {
         assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 
-
     @Test
     void testUpdateCustomer() throws Exception {
         Customer customer = customerServiceImpl.listCustomers().get(0);
