@@ -47,9 +47,9 @@ class BeerControllerTest {
         given(beerService.saveNewBeer(any(Beer.class))).willReturn(beerServiceImpl.listBeers().get(1));
 
         mockMvc.perform(post("/api/v1/beer")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beer)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
@@ -59,7 +59,7 @@ class BeerControllerTest {
         given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
 
         mockMvc.perform(get("/api/v1/beer")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(3)));
@@ -72,7 +72,7 @@ class BeerControllerTest {
         given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
 
         mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))
