@@ -1,5 +1,7 @@
 package guru_springframework.spring_6_rest_mvc.bootstrap;
 
+import guru_springframework.spring_6_rest_mvc.entities.Beer;
+import guru_springframework.spring_6_rest_mvc.entities.Customer;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,10 +34,10 @@ class BootstrapDataTest {
         assertThat(beerRepository.count()).isEqualTo(3);
         assertThat(customerRepository.count()).isEqualTo(3);
 
-        System.out.println("beerId: " + beerRepository.findAll().get(0).getId());
-        System.out.println("beerVersion: " + beerRepository.findAll().get(0).getVersion());
+        Beer beer = beerRepository.findAll().getFirst();
+        System.out.println("beer Id: " + beer.getId() + ", beerVersion: " + beer.getVersion());
 
-        System.out.println("customerId: " + customerRepository.findAll().get(0).getId());
-        System.out.println("customerVersion: " + customerRepository.findAll().get(0).getVersion());
+        Customer customer = customerRepository.findAll().getFirst();
+        System.out.println("customerId: " + customer.getId() + ", customerVersion: " + customer.getVersion());
     }
 }
