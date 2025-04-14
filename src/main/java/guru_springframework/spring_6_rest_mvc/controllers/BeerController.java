@@ -35,7 +35,7 @@ public class BeerController {
 
         if (!beerService.deleteById(beerId)) {
             throw new NotFoundException();
-        };
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
