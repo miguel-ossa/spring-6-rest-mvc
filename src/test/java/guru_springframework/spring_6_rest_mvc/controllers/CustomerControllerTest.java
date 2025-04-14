@@ -54,7 +54,7 @@ class CustomerControllerTest {
 
     @Test
     void testPatchCustomer() throws Exception {
-        CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+        CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
 
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "New Name");
@@ -72,7 +72,9 @@ class CustomerControllerTest {
 
     @Test
     void testDeleteCustomer() throws Exception {
-        CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+        CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
+
+        given(customerService.deleteById(any())).willReturn(true);
 
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -85,7 +87,9 @@ class CustomerControllerTest {
 
     @Test
     void testUpdateCustomer() throws Exception {
-        CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+        CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
+
+        given(customerService.updateCustomerById(any(),any())).willReturn(Optional.of(customer));
 
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -98,7 +102,7 @@ class CustomerControllerTest {
 
     @Test
     void testCreateNewCustomer() throws Exception {
-        CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+        CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
         customer.setVersion(null);
         customer.setId(null);
 
@@ -134,7 +138,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+        CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
 
         given(customerService.getCustomerById(customer.getId())).willReturn(Optional.of(customer));
 

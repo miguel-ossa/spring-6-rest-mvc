@@ -49,7 +49,7 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setPrice(beer.getPrice());
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
-        }, () -> atomicReference.set(Optional.empty()));
+            }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
