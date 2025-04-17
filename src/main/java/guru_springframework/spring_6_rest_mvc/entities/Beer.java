@@ -2,6 +2,8 @@ package guru_springframework.spring_6_rest_mvc.entities;
 
 import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -25,10 +27,19 @@ public class Beer {
     @Version
     private Integer version;
 
+    @NotBlank
+    @NotNull
     private String beerName;
+
+    @NotNull
     private BeerStyle beerStyle;
+
+    @NotBlank
+    @NotNull
     private String upc;
     private Integer quantityOnHand;
+
+    @NotNull
     private BigDecimal price;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
