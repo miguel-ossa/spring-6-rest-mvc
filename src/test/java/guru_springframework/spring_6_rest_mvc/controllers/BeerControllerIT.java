@@ -58,7 +58,7 @@ class BeerControllerIT {
         Beer beer = beerRepository.findAll().getFirst();
 
         Map<String, Object> beerMap = new HashMap<>();
-        beerMap.put("beerName", "New Name New Name New Name New Name New Name New Name New Name TOO LONG!");
+        beerMap.put("beerName", "New Name New Name New Name New Name New Name TOO LONG!!!!!!");
 
         mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
