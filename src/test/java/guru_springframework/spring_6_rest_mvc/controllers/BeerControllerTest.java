@@ -2,6 +2,7 @@ package guru_springframework.spring_6_rest_mvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru_springframework.spring_6_rest_mvc.model.BeerDTO;
+import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.services.BeerService;
 import guru_springframework.spring_6_rest_mvc.services.BeerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -93,12 +95,28 @@ class BeerControllerTest {
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID,  beer.getId())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beer)))
-                .andExpect(status().isNoContent());
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isNoContent())
+                .andReturn();
 
         verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
+    }
+
+    @Test
+    void testUpdateBeerBlankName() throws Exception {
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+        beer.setBeerName("");
+
+        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
+
+        mockMvc.perform(put(BeerController.BEER_PATH_ID,  beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)));
     }
 
     @Test
@@ -118,15 +136,85 @@ class BeerControllerTest {
     }
 
     @Test
-    void testCreateBeerNullBeerName() throws Exception {
-        BeerDTO beerDTO = BeerDTO.builder().build();
+    void testCreateBeerNullUpc() throws Exception {
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+        beer.setId(null);
+        beer.setBeerStyle(BeerStyle.ALE);
+        beer.setBeerName("Test");
+        beer.setPrice(new BigDecimal("11.11"));
+        beer.setUpc(null);
 
-        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
 
         MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beerDTO)))
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testCreateBeerCheckPrice() throws Exception {
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+        beer.setId(null);
+        beer.setBeerStyle(BeerStyle.ALE);
+        beer.setBeerName("Test");
+        beer.setUpc("12345");
+        beer.setPrice(null);
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testCreateBeerNullBeerStyle() throws Exception {
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+        beer.setId(null);
+        beer.setBeerName("Test");
+        beer.setUpc("12345");
+        beer.setPrice(new BigDecimal("11.11"));
+        beer.setBeerStyle(null);
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testCreateBeerNullBeerName() throws Exception {
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+        beer.setId(null);
+        beer.setBeerStyle(BeerStyle.ALE);
+        beer.setUpc("12345");
+        beer.setPrice(new BigDecimal("11.11"));
+        beer.setBeerName(null);
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.length()", is(2)))
                 .andReturn();
