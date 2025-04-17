@@ -16,13 +16,12 @@ import java.util.stream.Collectors;
 public class CustomErrorController {
 
     @ExceptionHandler
-    ResponseEntity handleJPAViolations(TransactionSystemException exception) {
+    ResponseEntity<List<Map<String, String>>> handleJPAViolations(TransactionSystemException exception) {
         ResponseEntity.BodyBuilder responseEntity = ResponseEntity.badRequest();
 
-        if (exception.getCause().getCause() instanceof ConstraintViolationException) {
-            ConstraintViolationException ve = (ConstraintViolationException) exception.getCause().getCause();
+        if (exception.getCause().getCause() instanceof ConstraintViolationException ve) {
 
-            List errors = ve.getConstraintViolations().stream()
+            List<Map<String, String>> errors = ve.getConstraintViolations().stream()
                     .map(constraintViolation -> {
                         Map<String, String> errMap = new HashMap<>();
                         errMap.put(constraintViolation.getPropertyPath().toString(),
