@@ -24,6 +24,9 @@ public class Customer {
     private UUID id;
     private String customerName;
 
+    @Column(length = 255)
+    private String email;
+
     @Version
     private Integer version;
 
