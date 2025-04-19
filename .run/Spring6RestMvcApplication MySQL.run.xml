@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Spring6RestMvcApplication MySQL" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="guru_springframework.spring_6_rest_mvc.Spring6RestMvcApplication" />
+    <module name="spring-6-rest-mvc" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=mysql" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="guru_springframework.spring_6_rest_mvc.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
