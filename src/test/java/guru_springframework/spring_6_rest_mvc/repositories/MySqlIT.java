@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("mysql")
-public class MySqlTest {
+public class MySqlIT {
 
     @Container
     @ServiceConnection
