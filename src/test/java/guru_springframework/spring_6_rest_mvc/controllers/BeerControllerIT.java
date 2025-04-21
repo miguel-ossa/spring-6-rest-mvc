@@ -57,6 +57,14 @@ class BeerControllerIT {
     }
 
     @Test
+    void testListBeersByName() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                .queryParam("beerName", "IPA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(100)));
+    }
+
+    @Test
     void testPatchBeerBadName() throws Exception {
         Beer beer = beerRepository.findAll().getFirst();
 
