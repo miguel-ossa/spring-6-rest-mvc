@@ -68,7 +68,7 @@ public class BeerController {
                                    @RequestParam(required = false) Boolean showInventory,
                                    @RequestParam(required = false) Integer pageNumber,
                                    @RequestParam(required = false) Integer pageSize) {
-        return beerService.listBeers(beerName, beerStyle, showInventory, 1, 25);
+        return beerService.listBeers(beerName, beerStyle, showInventory, pageNumber, pageSize);
     }
 
     @GetMapping(value = BEER_PATH_ID)
