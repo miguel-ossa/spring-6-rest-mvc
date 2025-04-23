@@ -2,14 +2,14 @@ package guru_springframework.spring_6_rest_mvc.services;
 
 import guru_springframework.spring_6_rest_mvc.model.BeerDTO;
 import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BeerService {
 
-    List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize);
+    Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize);
 
     Optional<BeerDTO> getBeerById(UUID id);
 
