@@ -4,8 +4,8 @@ import guru_springframework.spring_6_rest_mvc.entities.Beer;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
 import guru_springframework.spring_6_rest_mvc.entities.Customer;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -38,7 +38,7 @@ class BeerOrderRepositoryTest {
                 .customer(testCustomer)
                 .build();
 
-        BeerOrder savedBeerOrder = beerOrderRepository.saveAndFlush(beerOrder);
+        BeerOrder savedBeerOrder = beerOrderRepository.save(beerOrder);
 
         System.out.println(savedBeerOrder.getCustomerRef());
     }
