@@ -103,6 +103,8 @@ public class BeerServiceImpl implements BeerService {
         existing.setPrice(beer.getPrice());
         existing.setUpc(beer.getUpc());
         existing.setPrice(beer.getPrice());
+        existing.setQuantityOnHand(beer.getQuantityOnHand());
+        existing.setVersion(beer.getVersion());
 
         return Optional.of(existing);
     }

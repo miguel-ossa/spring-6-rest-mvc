@@ -79,6 +79,8 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<CustomerDTO> updateCustomerById(UUID customerId, CustomerDTO customer) {
         CustomerDTO existing = customerMap.get(customerId);
         existing.setCustomerName(customer.getCustomerName());
+        existing.setEmail(customer.getEmail());
+        existing.setVersion(customer.getVersion());
 
         return Optional.of(existing);
     }
