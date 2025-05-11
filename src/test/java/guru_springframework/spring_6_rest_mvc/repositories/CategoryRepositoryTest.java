@@ -26,12 +26,12 @@ class CategoryRepositoryTest {
     @Transactional
     @Test
     void testAddCategory() {
-        Category savedCategory = categoryRepository.saveAndFlush(Category.builder()
+        Category savedCategory = categoryRepository.save(Category.builder()
                         .description("Ales")
                 .build());
 
         testBeer.addCategory(savedCategory);
-        Beer savedBeer = beerRepository.save(testBeer);
+        Beer savedBeer = beerRepository.saveAndFlush(testBeer);
 
         System.out.println(savedBeer.getBeerName());
     }
