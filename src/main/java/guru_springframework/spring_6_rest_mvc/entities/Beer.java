@@ -70,7 +70,7 @@ public class Beer {
 
     public void removeCategory(Category category) {
         this.categories.remove(category);
-        category.getBeers().remove(category);
+        category.getBeers().remove(this);
     }
 
     @CreationTimestamp

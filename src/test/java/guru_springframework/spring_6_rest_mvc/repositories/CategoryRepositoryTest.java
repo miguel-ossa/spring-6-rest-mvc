@@ -26,7 +26,7 @@ class CategoryRepositoryTest {
     @Transactional
     @Test
     void testAddCategory() {
-        Category savedCategory = categoryRepository.save(Category.builder()
+        Category savedCategory = categoryRepository.saveAndFlush(Category.builder()
                         .description("Ales")
                 .build());
 
