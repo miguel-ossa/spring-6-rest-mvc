@@ -7,7 +7,9 @@ import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -115,10 +117,11 @@ public class BeerServiceJPA implements BeerService {
         // Con este código, testUpdateBeerBadVersion de BeerControllerIT
         // dará un fallo:
         // ObjectOptimisticLockingFailureException: Row was updated or deleted by another transaction
-*/
+
 //        return Optional.of(beerMapper.beerToBeerDto(
 //                beerRepository.save(beerMapper.beerDtoToBeer(beer))
 //        ));
+ */
         AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(foundBeer -> {
@@ -135,6 +138,11 @@ public class BeerServiceJPA implements BeerService {
         return atomicReference.get();
     }
 
+    //does not work...
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "beerCache", key = "#beerId"),
+            @CacheEvict(cacheNames = "beerListCache")
+    })
     @Override
     public Boolean deleteById(UUID beerId) {
         if (beerRepository.existsById(beerId)) {
