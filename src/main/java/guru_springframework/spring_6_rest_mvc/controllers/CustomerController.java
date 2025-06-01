@@ -24,9 +24,10 @@ public class CustomerController {
     public final CustomerService customerService;
 
     @PatchMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity<HttpStatus> updateBeerPatchById(@PathVariable(CUSTOMER_ID) UUID customerId, @RequestBody CustomerDTO customer) {
+    public ResponseEntity<HttpStatus> updateBeerPatchById(@PathVariable(CUSTOMER_ID) UUID customerId,
+                                                          @RequestBody CustomerDTO customer) {
 
-        customerService.patchCustomerById(customerId, customer);
+        customerService.patchById(customerId, customer);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -63,7 +64,7 @@ public class CustomerController {
 
     @GetMapping(value = CUSTOMER_PATH)
     public List<CustomerDTO> listCustomers() {
-        return customerService.listCustomers();
+        return customerService.getAllCustomers();
     }
 
     @GetMapping(value = CUSTOMER_PATH_ID)

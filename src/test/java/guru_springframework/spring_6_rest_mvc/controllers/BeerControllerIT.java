@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -60,15 +59,6 @@ class BeerControllerIT {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .apply(springSecurity())
                 .build();
-    }
-
-    @Test
-    void testNoAuth() throws Exception {
-        //Test No Auth
-        mockMvc.perform(get(BeerController.BEER_PATH)
-                        .queryParam("beerStyle", BeerStyle.IPA.name())
-                        .queryParam("pageSize", "800"))
-                .andExpect(status().isUnauthorized());
     }
 
     @Disabled // just for demo purposes
@@ -153,7 +143,17 @@ class BeerControllerIT {
     }
 
     @Test
-    void testListBeersByStyle() throws Exception {
+    void testNoAuth() throws Exception {
+        //Test No Auth
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", "800"))
+                .andExpect(status().isUnauthorized());
+
+    }
+
+    @Test
+    void tesListBeersByStyle() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .with(BeerControllerTest.jwtRequestPostProcessor)
                         .queryParam("beerStyle", BeerStyle.IPA.name())
@@ -163,7 +163,7 @@ class BeerControllerIT {
     }
 
     @Test
-    void testListBeersByName() throws Exception {
+    void tesListBeersByName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .with(BeerControllerTest.jwtRequestPostProcessor)
                         .queryParam("beerName", "IPA")
@@ -177,7 +177,7 @@ class BeerControllerIT {
         Beer beer = beerRepository.findAll().getFirst();
 
         Map<String, Object> beerMap = new HashMap<>();
-        beerMap.put("beerName", "New Name New Name New Name New Name New Name TOO LONG!!!!!!");
+        beerMap.put("beerName", "New Name 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
 
         MvcResult result = mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                         .with(BeerControllerTest.jwtRequestPostProcessor)
@@ -187,11 +187,10 @@ class BeerControllerIT {
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        System.out.println(result.getResponse().getContentAsString());
-    }
+        System.out.println(result.getResponse().getContentAsString());   }
 
     @Test
-    void testDeleteByIdNotFound() {
+    void testDeleteByIDNotFound() {
         assertThrows(NotFoundException.class, () -> beerController.deleteById(UUID.randomUUID()));
     }
 
@@ -201,8 +200,10 @@ class BeerControllerIT {
     void deleteByIdFound() {
         Beer beer = beerRepository.findAll().getFirst();
 
-        ResponseEntity<HttpStatus> responseEntity = beerController.deleteById(beer.getId());
+        ResponseEntity responseEntity = beerController.deleteById(beer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+
+        assertThat(beerRepository.findById(beer.getId()).isEmpty());
     }
 
     @Test
@@ -221,11 +222,10 @@ class BeerControllerIT {
         final String beerName = "UPDATED";
         beerDTO.setBeerName(beerName);
 
-        ResponseEntity<HttpStatus> responseEntity = beerController.updateById(beer.getId(), beerDTO);
+        ResponseEntity responseEntity = beerController.updateById(beer.getId(), beerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
-        Beer updatedBeer = beerRepository
-                .findById(beer.getId())
-                        .orElseThrow(() -> new RuntimeException("Beer not found"));
+
+        Beer updatedBeer = beerRepository.findById(beer.getId()).get();
         assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
     }
 
@@ -237,7 +237,7 @@ class BeerControllerIT {
                 .beerName("New Beer")
                 .build();
 
-        ResponseEntity<HttpStatus> responseEntity = beerController.handlePost(beerDTO);
+        ResponseEntity responseEntity = beerController.handlePost(beerDTO);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(201));
         assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
@@ -245,9 +245,7 @@ class BeerControllerIT {
         String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
         UUID savedUUID = UUID.fromString(locationUUID[4]);
 
-        Beer beer = beerRepository
-                .findById(savedUUID)
-                .orElseThrow(() -> new RuntimeException("Beer not found"));
+        Beer beer = beerRepository.findById(savedUUID).get();
         assertThat(beer).isNotNull();
     }
 
@@ -267,9 +265,9 @@ class BeerControllerIT {
 
     @Test
     void testListBeers() {
-        Page<BeerDTO> dtos = beerController.listBeers(null, null, false, 1, 25);
+        Page<BeerDTO> dtos = beerController.listBeers(null, null, false, 1, 2413);
 
-        assertThat(dtos.getContent().size()).isEqualTo(25);
+        assertThat(dtos.getContent().size()).isEqualTo(1000);
     }
 
     @Rollback

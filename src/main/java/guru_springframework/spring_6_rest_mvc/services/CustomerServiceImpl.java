@@ -47,11 +47,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerDTO> listCustomers() {
-        return new ArrayList<>(customerMap.values());
-    }
-
-    @Override
     public Optional<CustomerDTO> getCustomerById(UUID id) {
         log.debug("Get Customer by Id - in service. Id: " + id.toString());
 
@@ -93,12 +88,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void patchCustomerById(UUID customerId, CustomerDTO customer) {
+    public Optional<CustomerDTO> patchById(UUID customerId, CustomerDTO customer) {
         CustomerDTO existing = customerMap.get(customerId);
 
         if (StringUtils.hasText(customer.getCustomerName())) {
             existing.setCustomerName(customer.getCustomerName());
         }
+
+        return Optional.of(existing);
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomers() {
+        return new ArrayList<>(customerMap.values());
     }
 }
 
