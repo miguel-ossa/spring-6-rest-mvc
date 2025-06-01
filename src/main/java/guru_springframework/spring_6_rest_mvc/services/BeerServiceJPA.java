@@ -7,9 +7,8 @@ import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class BeerServiceJPA implements BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
+    private final CacheManager cacheManager;
 
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_PAGE_SIZE = 25;
@@ -39,16 +40,16 @@ public class BeerServiceJPA implements BeerService {
                                    Integer pageNumber, Integer pageSize) {
 
         log.info("List Beers - in service");
+
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
 
         Page<Beer> beerPage;
 
-        if (StringUtils.hasText(beerName) && beerStyle == null) {
+        if(StringUtils.hasText(beerName) && beerStyle == null) {
             beerPage = listBeersByName(beerName, pageRequest);
-
-        } else if (!StringUtils.hasText(beerName) && beerStyle != null) {
+        } else if (!StringUtils.hasText(beerName) && beerStyle != null){
             beerPage = listBeersByStyle(beerStyle, pageRequest);
-        } else if (StringUtils.hasText(beerName) && beerStyle != null) {
+        } else if (StringUtils.hasText(beerName) && beerStyle != null){
             beerPage = listBeersByNameAndStyle(beerName, beerStyle, pageRequest);
         } else {
             beerPage = beerRepository.findAll(pageRequest);
@@ -67,7 +68,7 @@ public class BeerServiceJPA implements BeerService {
         int queryPageSize;
 
         if (pageNumber != null && pageNumber > 0) {
-            queryPageNumber = pageNumber -1;
+            queryPageNumber = pageNumber - 1;
         } else {
             queryPageNumber = DEFAULT_PAGE;
         }
@@ -87,41 +88,39 @@ public class BeerServiceJPA implements BeerService {
         return PageRequest.of(queryPageNumber, queryPageSize, sort);
     }
 
-    public Page<Beer> listBeersByName(String beerName, Pageable pageable) {
-        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%", pageable);
+    private Page<Beer> listBeersByNameAndStyle(String beerName, BeerStyle beerStyle, Pageable pageable) {
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%",
+                beerStyle, pageable);
     }
 
     public Page<Beer> listBeersByStyle(BeerStyle beerStyle, Pageable pageable) {
         return beerRepository.findAllByBeerStyle(beerStyle, pageable);
     }
 
-    public Page<Beer> listBeersByNameAndStyle(String beerName, BeerStyle beerStyle, Pageable pageable) {
-        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%", beerStyle, pageable);
+    public Page<Beer> listBeersByName(String beerName, Pageable pageable){
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%", pageable);
     }
 
     @Cacheable(cacheNames = "beerCache", key = "#id")
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
-        log.info("Get Beer By Id - in service");
-        return Optional.ofNullable(beerMapper.beerToBeerDto(beerRepository.findById(id).orElse(null)));
+        log.info("Get Beer by Id - in service");
+
+        return Optional.ofNullable(beerMapper.beerToBeerDto(beerRepository.findById(id)
+                .orElse(null)));
     }
 
     @Override
     public BeerDTO saveNewBeer(BeerDTO beer) {
+        Objects.requireNonNull(cacheManager.getCache("beerListCache")).clear();
+
         return beerMapper.beerToBeerDto(beerRepository.save(beerMapper.beerDtoToBeer(beer)));
     }
 
     @Override
     public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer) {
-/*
-        // Con este código, testUpdateBeerBadVersion de BeerControllerIT
-        // dará un fallo:
-        // ObjectOptimisticLockingFailureException: Row was updated or deleted by another transaction
+        clearCache(beerId);
 
-//        return Optional.of(beerMapper.beerToBeerDto(
-//                beerRepository.save(beerMapper.beerDtoToBeer(beer))
-//        ));
- */
         AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(foundBeer -> {
@@ -130,21 +129,18 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setUpc(beer.getUpc());
             foundBeer.setPrice(beer.getPrice());
             foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
-            foundBeer.setVersion(beer.getVersion());
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
-            }, () -> atomicReference.set(Optional.empty()));
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
 
-    //does not work...
-    @Caching(evict = {
-            @CacheEvict(cacheNames = "beerCache", key = "#beerId"),
-            @CacheEvict(cacheNames = "beerListCache")
-    })
+
     @Override
     public Boolean deleteById(UUID beerId) {
+        clearCache(beerId);
+
         if (beerRepository.existsById(beerId)) {
             beerRepository.deleteById(beerId);
             return true;
@@ -152,8 +148,15 @@ public class BeerServiceJPA implements BeerService {
         return false;
     }
 
+    private void clearCache(UUID beerId) {
+        Objects.requireNonNull(cacheManager.getCache("beerCache")).evict(beerId);
+        Objects.requireNonNull(cacheManager.getCache("beerListCache")).clear();
+    }
+
     @Override
     public Optional<BeerDTO> patchBeerById(UUID beerId, BeerDTO beer) {
+        clearCache(beerId);
+
         AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(foundBeer -> {
