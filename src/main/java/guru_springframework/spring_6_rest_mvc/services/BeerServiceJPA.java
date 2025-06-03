@@ -2,6 +2,9 @@ package guru_springframework.spring_6_rest_mvc.services;
 
 import guru_springframework.spring_6_rest_mvc.entities.Beer;
 import guru_springframework.spring_6_rest_mvc.events.BeerCreatedEvent;
+import guru_springframework.spring_6_rest_mvc.events.BeerDeletedEvent;
+import guru_springframework.spring_6_rest_mvc.events.BeerPatchedEvent;
+import guru_springframework.spring_6_rest_mvc.events.BeerUpdatedEvent;
 import guru_springframework.spring_6_rest_mvc.mappers.BeerMapper;
 import guru_springframework.spring_6_rest_mvc.model.BeerDTO;
 import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
@@ -145,6 +148,11 @@ public class BeerServiceJPA implements BeerService {
                     .beerToBeerDto(beerRepository.save(foundBeer))));
         }, () -> atomicReference.set(Optional.empty()));
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        applicationEventPublisher.publishEvent(
+                new BeerUpdatedEvent(beerMapper.beerDtoToBeer(beer), auth));
+
         return atomicReference.get();
     }
 
@@ -154,6 +162,11 @@ public class BeerServiceJPA implements BeerService {
         clearCache(beerId);
 
         if (beerRepository.existsById(beerId)) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            applicationEventPublisher.publishEvent(
+                    new BeerDeletedEvent(Beer.builder().id(beerId).build(), auth));
+
             beerRepository.deleteById(beerId);
             return true;
         }
@@ -190,6 +203,11 @@ public class BeerServiceJPA implements BeerService {
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
         }, () -> atomicReference.set(Optional.empty()));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        applicationEventPublisher.publishEvent(
+                new BeerPatchedEvent(beerMapper.beerDtoToBeer(beer), auth));
 
         return atomicReference.get();
     }
