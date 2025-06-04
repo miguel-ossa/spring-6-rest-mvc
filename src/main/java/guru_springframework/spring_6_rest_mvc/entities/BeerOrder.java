@@ -34,23 +34,23 @@ import java.util.UUID;
 public class BeerOrder {
 
     public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate,
-                                             String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines,
-                                             BeerOrderShipment beerOrderShipment) {
-    this.id = id;
-    this.version = version;
-    this.createdDate = createdDate;
-    this.lastModifiedDate = lastModifiedDate;
-    this.customerRef = customerRef;
-    this.setCustomer(customer);
-    this.beerOrderLines = beerOrderLines;
-    this.setBeerOrderShipment(beerOrderShipment);
-}
+                     String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines,
+                     BeerOrderShipment beerOrderShipment) {
+        this.id = id;
+        this.version = version;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.customerRef = customerRef;
+        this.setCustomer(customer);
+        this.beerOrderLines = beerOrderLines;
+        this.setBeerOrderShipment(beerOrderShipment);
+    }
 
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
     @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
     @Version
