@@ -31,7 +31,9 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @Builder
-public class BeerOrder {    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate,
+public class BeerOrder {
+
+    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate,
                                              String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines,
                                              BeerOrderShipment beerOrderShipment) {
     this.id = id;
@@ -43,8 +45,6 @@ public class BeerOrder {    public BeerOrder(UUID id, Long version, Timestamp cr
     this.beerOrderLines = beerOrderLines;
     this.setBeerOrderShipment(beerOrderShipment);
 }
-
-
 
     @Id
     @GeneratedValue(generator = "UUID")
