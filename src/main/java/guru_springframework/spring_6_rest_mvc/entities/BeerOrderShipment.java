@@ -2,16 +2,18 @@ package guru_springframework.spring_6_rest_mvc.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,6 +34,9 @@ public class BeerOrderShipment {
     @OneToOne
     private BeerOrder beerOrder;
 
+    @NotBlank
+    @Size(max = 100)
+    @Column(length = 100)
     private String trackingNumber;
 
     @Override

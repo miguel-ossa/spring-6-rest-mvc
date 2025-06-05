@@ -17,6 +17,7 @@
 package guru_springframework.spring_6_rest_mvc.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
@@ -24,9 +25,6 @@ import org.hibernate.type.SqlTypes;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-/**
- * Created by jt on 2019-01-26.
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -62,6 +60,7 @@ public class BeerOrderLine {
     @ManyToOne
     private Beer beer;
 
+    @Min(value = 1, message = "Quantity On Hand must be greater than 0")
     private Integer orderQuantity = 0;
     private Integer quantityAllocated = 0;
 }
