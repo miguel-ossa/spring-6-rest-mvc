@@ -1,14 +1,15 @@
 package guru_springframework.spring_6_rest_mvc.bootstrap;
 
-import guru_springframework.spring_6_rest_mvc.entities.Beer;
-import guru_springframework.spring_6_rest_mvc.entities.Customer;
+import guru_springframework.spring_6_rest_mvc.entities.*;
 import guru_springframework.spring_6_rest_mvc.model.BeerCSVRecord;
 import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
+import guru_springframework.spring_6_rest_mvc.repositories.BeerOrderRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.CustomerRepository;
 import guru_springframework.spring_6_rest_mvc.services.BeerCsvService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -19,13 +20,16 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
+    private final BeerOrderRepository beerOrderRepository;
     private final BeerCsvService beerCsvService;
 
     @Transactional
@@ -34,6 +38,10 @@ public class BootstrapData implements CommandLineRunner {
         loadBeerData();
         loadCSVData();
         loadCustomerData();
+        if (beerOrderRepository.count() == 0) {
+            loadOrdersData();
+            loadOrderDataJohn();
+        }
     }
 
     private void loadCSVData() throws FileNotFoundException {
@@ -119,13 +127,113 @@ public class BootstrapData implements CommandLineRunner {
                     .lastModifiedDate(LocalDateTime.now())
                     .build();
 
-            Customer customer3 = Customer.builder()
-                    .customerName("Lucas")
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now())
-                    .build();
-
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            customerRepository.saveAll(Arrays.asList(customer1, customer2));
         }
+    }
+
+    private void loadOrdersData() {
+        List<Beer> beers = beerRepository.findAll();
+        List<Customer> customers = customerRepository.findAll();
+
+        createOrder1(beers, customers);
+        createOrder2(beers, customers);
+    }
+
+    private void createOrder1(List<Beer> beers, List<Customer> customers) {
+        BeerOrder order1 = new BeerOrder();
+        order1.setCustomer(customers.getFirst());
+        order1.setCustomerRef("First customer");
+
+        BeerOrderLine orderLine1 = BeerOrderLine.builder()
+                .beerOrder(order1)
+                .beer(beers.getFirst())
+                .build();
+
+        BeerOrderLine orderLine2 = BeerOrderLine.builder()
+                .beerOrder(order1)
+                .beer(beers.get(1))
+                .build();
+
+        Set<BeerOrderLine> beerOrderLines = new HashSet<>(Arrays.asList(orderLine1, orderLine2));
+        order1.setBeerOrderLines(beerOrderLines);
+
+        BeerOrderShipment shipment1 = BeerOrderShipment.builder()
+                .beerOrder(order1)
+                .trackingNumber("1234566667")
+                .build();
+        order1.setBeerOrderShipment(shipment1);
+
+        beerOrderRepository.save(order1);
+    }
+
+    private void createOrder2(List<Beer> beers, List<Customer> customers) {
+        BeerOrder order1 = new BeerOrder();
+        order1.setCustomer(customers.get(1));
+        order1.setCustomerRef(customers.get(1).getCustomerName());
+
+        BeerOrderLine orderLine1 = BeerOrderLine.builder()
+                .beerOrder(order1)
+                .beer(beers.get(2))
+                .build();
+
+        BeerOrderLine orderLine2 = BeerOrderLine.builder()
+                .beerOrder(order1)
+                .beer(beers.get(3))
+                .build();
+
+        BeerOrderLine orderLine3 = BeerOrderLine.builder()
+                .beerOrder(order1)
+                .beer(beers.get(1))
+                .build();
+
+        Set<BeerOrderLine> beerOrderLines = new HashSet<>(Arrays.asList(orderLine1, orderLine2, orderLine3));
+        order1.setBeerOrderLines(beerOrderLines);
+
+        BeerOrderShipment shipment1 = BeerOrderShipment.builder()
+                .beerOrder(order1)
+                .trackingNumber("4444666677777")
+                .build();
+        order1.setBeerOrderShipment(shipment1);
+
+        beerOrderRepository.save(order1);
+    }
+
+    private void loadOrderDataJohn() {
+        val customers = customerRepository.findAll();
+        val beers = beerRepository.findAll();
+
+        val beerIterator = beers.iterator();
+
+        customers.forEach(customer -> {
+
+            beerOrderRepository.save(BeerOrder.builder()
+                    .customer(customer)
+                    .beerOrderLines(Set.of(
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(1)
+                                    .build(),
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(2)
+                                    .build()
+                    )).build());
+
+            beerOrderRepository.save(BeerOrder.builder()
+                    .customer(customer)
+                    .beerOrderLines(Set.of(
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(1)
+                                    .build(),
+                            BeerOrderLine.builder()
+                                    .beer(beerIterator.next())
+                                    .orderQuantity(2)
+                                    .build()
+                    ))
+                    .build());
+        });
+
+        val orders = beerOrderRepository.findAll();
     }
 }

@@ -13,12 +13,12 @@ import org.mapstruct.Mapping;
 public interface BeerOrderMapper {
 
     @Mapping(target = "beerOrder", ignore = true)
-    @Mapping(target = "hashCode", ignore = true)
+    //@Mapping(target = "hashCode", ignore = true)
     BeerOrderShipment beerOrderShipmentDtoToBeerOrderShipment(BeerOrderShipmentDTO dto);
 
     BeerOrderShipmentDTO beerOrderShipmentToBeerOrderShipmentDto(BeerOrderShipment beerOrderShipment);
 
-    @Mapping(target = "isNew", ignore = true)
+    //@Mapping(target = "isNew", ignore = true)
     @Mapping(target = "beerOrder", ignore = true)
     BeerOrderLine beerOrderLineDtoToBeerOrderLine(BeerOrderLineDTO dto);
 
