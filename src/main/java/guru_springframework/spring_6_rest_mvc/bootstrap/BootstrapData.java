@@ -38,6 +38,7 @@ public class BootstrapData implements CommandLineRunner {
         loadBeerData();
         loadCSVData();
         loadCustomerData();
+//        beerOrderRepository.deleteAll();
         if (beerOrderRepository.count() == 0) {
             loadOrdersData();
             loadOrderDataJohn();
@@ -135,11 +136,6 @@ public class BootstrapData implements CommandLineRunner {
         List<Beer> beers = beerRepository.findAll();
         List<Customer> customers = customerRepository.findAll();
 
-        createOrder1(beers, customers);
-        createOrder2(beers, customers);
-    }
-
-    private void createOrder1(List<Beer> beers, List<Customer> customers) {
         BeerOrder order1 = new BeerOrder();
         order1.setCustomer(customers.getFirst());
         order1.setCustomerRef("First customer");
@@ -163,39 +159,18 @@ public class BootstrapData implements CommandLineRunner {
                 .build();
         order1.setBeerOrderShipment(shipment1);
 
-        beerOrderRepository.save(order1);
-    }
-
-    private void createOrder2(List<Beer> beers, List<Customer> customers) {
-        BeerOrder order1 = new BeerOrder();
-        order1.setCustomer(customers.get(1));
-        order1.setCustomerRef(customers.get(1).getCustomerName());
-
-        BeerOrderLine orderLine1 = BeerOrderLine.builder()
-                .beerOrder(order1)
-                .beer(beers.get(2))
-                .build();
-
-        BeerOrderLine orderLine2 = BeerOrderLine.builder()
-                .beerOrder(order1)
-                .beer(beers.get(3))
-                .build();
+        BeerOrder order2 = new BeerOrder();
+        order2.setCustomer(customers.get(1));
+        order2.setCustomerRef(customers.get(1).getCustomerName());
 
         BeerOrderLine orderLine3 = BeerOrderLine.builder()
-                .beerOrder(order1)
-                .beer(beers.get(1))
+                .beerOrder(order2)
+                .beer(beers.get(2))
                 .build();
-
-        Set<BeerOrderLine> beerOrderLines = new HashSet<>(Arrays.asList(orderLine1, orderLine2, orderLine3));
-        order1.setBeerOrderLines(beerOrderLines);
-
-        BeerOrderShipment shipment1 = BeerOrderShipment.builder()
-                .beerOrder(order1)
-                .trackingNumber("4444666677777")
-                .build();
-        order1.setBeerOrderShipment(shipment1);
+        order2.addBeerOrderLine(orderLine3);
 
         beerOrderRepository.save(order1);
+        beerOrderRepository.save(order2);
     }
 
     private void loadOrderDataJohn() {
@@ -234,6 +209,6 @@ public class BootstrapData implements CommandLineRunner {
                     .build());
         });
 
-        val orders = beerOrderRepository.findAll();
+        //val orders = beerOrderRepository.findAll();
     }
 }
