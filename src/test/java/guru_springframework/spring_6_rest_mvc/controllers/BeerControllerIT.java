@@ -9,6 +9,7 @@ import guru_springframework.spring_6_rest_mvc.events.BeerUpdatedEvent;
 import guru_springframework.spring_6_rest_mvc.mappers.BeerMapper;
 import guru_springframework.spring_6_rest_mvc.model.BeerDTO;
 import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
+import guru_springframework.spring_6_rest_mvc.repositories.BeerOrderRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import jakarta.transaction.Transactional;
 import lombok.val;
@@ -56,6 +57,9 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepository;
+
+    @Autowired
+    BeerOrderRepository beerOrderRepository;
 
     @Autowired
     BeerMapper beerMapper;
@@ -372,6 +376,7 @@ class BeerControllerIT {
     @Transactional
     @Test
     void testEmptyList() {
+        beerOrderRepository.deleteAll();
         beerRepository.deleteAll();
         Page<BeerDTO> dtos = beerController.listBeers(null, null, false, 1, 25);
 

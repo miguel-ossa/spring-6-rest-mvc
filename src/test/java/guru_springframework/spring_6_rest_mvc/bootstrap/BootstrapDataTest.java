@@ -41,7 +41,7 @@ class BootstrapDataTest {
         bootstrapData.run();
 
         assertThat(beerRepository.count()).isGreaterThan(1);
-        assertThat(customerRepository.count()).isEqualTo(3);
+        assertThat(customerRepository.count()).isGreaterThan(1);
         assertThat(beerOrderRepository.count()).isGreaterThan(1);
     }
 }

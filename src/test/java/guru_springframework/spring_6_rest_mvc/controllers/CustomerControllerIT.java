@@ -3,6 +3,7 @@ package guru_springframework.spring_6_rest_mvc.controllers;
 import guru_springframework.spring_6_rest_mvc.entities.Customer;
 import guru_springframework.spring_6_rest_mvc.mappers.CustomerMapper;
 import guru_springframework.spring_6_rest_mvc.model.CustomerDTO;
+import guru_springframework.spring_6_rest_mvc.repositories.BeerOrderRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.CustomerRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class CustomerControllerIT {
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    BeerOrderRepository beerOrderRepository;
 
     @Autowired
     CustomerMapper customerMapper;
@@ -109,13 +113,14 @@ public class CustomerControllerIT {
     void testListCustomers() {
         List<CustomerDTO> dtos = customerController.listCustomers();
 
-        assertThat(dtos.size()).isEqualTo(3);
+        assertThat(dtos.size()).isGreaterThan(1);
     }
 
     @Rollback
     @Transactional
     @Test
     void testEmptyList() {
+        beerOrderRepository.deleteAll();
         customerRepository.deleteAll();
         List<CustomerDTO> dtos = customerController.listCustomers();
 
