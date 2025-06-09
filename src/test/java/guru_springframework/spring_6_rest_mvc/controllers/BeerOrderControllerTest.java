@@ -53,7 +53,7 @@ class BeerOrderControllerTest {
                     .notBefore(Instant.now().minusSeconds(5L)));
 
     @Test
-    void listBeerOrders() throws Exception {
+    void testListBeerOrders() throws Exception {
         given(beerOrderService.getAllBeerOrders()).willReturn(beerOrderServiceImpl.getAllBeerOrders());
 
         mockMvc.perform(get(BeerOrderController.BEER_ORDER_PATH)
@@ -65,7 +65,7 @@ class BeerOrderControllerTest {
     }
 
     @Test
-    void getBeerOrderById() throws Exception {
+    void testGetBeerOrderById() throws Exception {
         BeerOrderDTO order = beerOrderServiceImpl.getAllBeerOrders().getFirst();
 
         given(beerOrderService.getBeerOrderById(order.getId())).willReturn(Optional.of(order));
@@ -77,4 +77,5 @@ class BeerOrderControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(order.getId().toString())));
     }
+
 }
