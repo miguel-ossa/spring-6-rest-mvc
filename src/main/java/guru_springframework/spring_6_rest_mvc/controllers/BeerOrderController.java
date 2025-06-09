@@ -30,5 +30,4 @@ public class BeerOrderController {
     public BeerOrderDTO getBeerOrderById(@PathVariable(BEER_ORDER_ID) UUID beerOrderId) {
         return beerOrderService.getBeerOrderById(beerOrderId).orElseThrow(NotFoundException::new);
     }
-
 }
