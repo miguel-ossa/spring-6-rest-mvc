@@ -29,6 +29,27 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Web layer tests for {@link CustomerController} using {@link MockMvc} within a
+ * {@code @WebMvcTest} context.
+ *
+ * <p>This test class verifies the HTTP endpoints of the {@code CustomerController},
+ * ensuring correct request handling response codes, and interactions with the service layer.
+ *
+ * <p>The {@code CustomerServiceImpl} is mocked to isolate and verify controller behavior
+ * without involving the main service {@code CustomerServiceJPA} that uses real data.
+ *
+ * <p>Sample test data is provided by a manually instantiated {@code CustomerServiceImpl},
+ * which manages an in-memory collection of {@code Customer} objects (e.g., via a {@code Map})
+ * and does not connect to any real database.
+ *
+ * <p>Security configuration is imported via {@code SpringSecConfig}, and authenticated requests
+ * are simulated using a static JWT processor from {@code BeerControllerTest}.
+ *
+ * <p>Test cases include creating, updating, patching, deleting, and retrieving customers,
+ * as well as handling not-found scenarios and verifying response integrity.
+ */
+
 @WebMvcTest(CustomerController.class)
 @Import(SpringSecConfig.class)
 class CustomerControllerTest {

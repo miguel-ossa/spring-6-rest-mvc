@@ -20,6 +20,19 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Integration tests for {@link CustomerController}, using a full Spring Boot application context.
+ *
+ * <p>This test suite verifies the functionality of the REST controller responsible for
+ * CRUD operations on {@code Customer} entities, including actual interactions with the database.
+ *
+ * <p>The tests include both successful and failure cases for creating, updating, deleting,
+ * and retrieving customers.
+ *
+ * <p>Annotations such as {@code @Rollback} and {@code @Transactional} are used to ensure
+ * that the tests do not persistently affect the actual data.
+ */
+
 @SpringBootTest
 public class CustomerControllerIT {
     @Autowired
