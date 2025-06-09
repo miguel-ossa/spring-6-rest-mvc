@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -54,19 +55,19 @@ class BeerOrderControllerTest {
 
     @Test
     void testListBeerOrders() throws Exception {
-        given(beerOrderService.getAllBeerOrders()).willReturn(beerOrderServiceImpl.getAllBeerOrders());
+        given(beerOrderService.listBeerOrders(any(), any())).willReturn(beerOrderServiceImpl.listBeerOrders(1, 25));
 
         mockMvc.perform(get(BeerOrderController.BEER_ORDER_PATH)
                         .with(BeerOrderControllerTest.jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(2)));
+                .andExpect(jsonPath("$.content.length()", is(2)));
     }
 
     @Test
     void testGetBeerOrderById() throws Exception {
-        BeerOrderDTO order = beerOrderServiceImpl.getAllBeerOrders().getFirst();
+        BeerOrderDTO order = beerOrderServiceImpl.listBeerOrders(1, 25).getContent().getFirst();
 
         given(beerOrderService.getBeerOrderById(order.getId())).willReturn(Optional.of(order));
 

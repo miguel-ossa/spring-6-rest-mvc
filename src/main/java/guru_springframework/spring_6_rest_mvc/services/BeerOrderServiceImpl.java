@@ -1,7 +1,10 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
 import guru_springframework.spring_6_rest_mvc.model.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -10,6 +13,7 @@ import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BeerOrderServiceImpl implements BeerOrderService {
 
     private final Map<UUID, BeerOrderDTO> beerOrderDTOMap;
@@ -105,8 +109,8 @@ public class BeerOrderServiceImpl implements BeerOrderService {
     }
 
     @Override
-    public List<BeerOrderDTO> getAllBeerOrders() {
-        return new ArrayList<>(beerOrderDTOMap.values());
+    public Page<BeerOrderDTO> listBeerOrders(Integer pageNumber, Integer pageSize) {
+        return new PageImpl<>(new ArrayList<>(beerOrderDTOMap.values()));
     }
 
     @Override

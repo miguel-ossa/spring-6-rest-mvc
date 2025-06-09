@@ -38,7 +38,7 @@ public class BootstrapData implements CommandLineRunner {
         loadBeerData();
         loadCSVData();
         loadCustomerData();
-//        beerOrderRepository.deleteAll();
+        //beerOrderRepository.deleteAll();
         if (beerOrderRepository.count() == 0) {
             loadOrdersData();
             loadOrderDataJohn();
