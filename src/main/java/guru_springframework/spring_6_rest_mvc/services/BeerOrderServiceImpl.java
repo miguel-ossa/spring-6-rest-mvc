@@ -1,5 +1,6 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
+import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
 import guru_springframework.spring_6_rest_mvc.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -116,5 +117,10 @@ public class BeerOrderServiceImpl implements BeerOrderService {
     @Override
     public Optional<BeerOrderDTO> getBeerOrderById(UUID id) {
         return Optional.of(beerOrderDTOMap.get(id));
+    }
+
+    @Override
+    public BeerOrder saveNewBeerOrder(BeerOrderCreateDTO beerOrderCreateDTO) {
+        return null;
     }
 }

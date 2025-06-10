@@ -1,15 +1,17 @@
 package guru_springframework.spring_6_rest_mvc.controllers;
 
+import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
+import guru_springframework.spring_6_rest_mvc.model.BeerOrderCreateDTO;
 import guru_springframework.spring_6_rest_mvc.model.BeerOrderDTO;
 import guru_springframework.spring_6_rest_mvc.services.BeerOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
 
 @Slf4j
@@ -33,13 +35,10 @@ public class BeerOrderController {
         return beerOrderService.getBeerOrderById(beerOrderId).orElseThrow(NotFoundException::new);
     }
 
-//    @PostMapping(BEER_ORDER_PATH)
-//    public ResponseEntity<HttpStatus> handlePost(@Validated @RequestBody BeerOrderDTO beerOrder) {
-//        BeerOrderDTO savedBeerOrder = beerOrderService.saveNewBeerOrder(beerOrder);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Location", BEER_ORDER_PATH + "/" + savedBeerOrder.getId().toString());
-//
-//        return new ResponseEntity<>(headers, HttpStatus.CREATED);
-//    }
+    @PostMapping(BEER_ORDER_PATH)
+    public ResponseEntity<Void> handlePost(@Validated @RequestBody BeerOrderCreateDTO beerOrder) {
+        BeerOrder savedBeerOrder = beerOrderService.saveNewBeerOrder(beerOrder);
+
+        return ResponseEntity.created(URI.create(BEER_ORDER_PATH + "/" + savedBeerOrder.getId().toString())).build();
+    }
 }
