@@ -32,4 +32,14 @@ public class BeerOrderController {
     public BeerOrderDTO getBeerOrderById(@PathVariable(BEER_ORDER_ID) UUID beerOrderId) {
         return beerOrderService.getBeerOrderById(beerOrderId).orElseThrow(NotFoundException::new);
     }
+
+//    @PostMapping(BEER_ORDER_PATH)
+//    public ResponseEntity<HttpStatus> handlePost(@Validated @RequestBody BeerOrderDTO beerOrder) {
+//        BeerOrderDTO savedBeerOrder = beerOrderService.saveNewBeerOrder(beerOrder);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Location", BEER_ORDER_PATH + "/" + savedBeerOrder.getId().toString());
+//
+//        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+//    }
 }
