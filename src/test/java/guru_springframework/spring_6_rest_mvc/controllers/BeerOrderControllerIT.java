@@ -2,7 +2,6 @@ package guru_springframework.spring_6_rest_mvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
-import guru_springframework.spring_6_rest_mvc.mappers.BeerOrderMapper;
 import guru_springframework.spring_6_rest_mvc.model.*;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerOrderRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
@@ -24,8 +23,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static guru_springframework.spring_6_rest_mvc.controllers.BeerOrderControllerTest.jwtRequestPostProcessor;
-import static org.hamcrest.core.Is.is;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -103,6 +102,7 @@ class BeerOrderControllerIT {
     }
 
     @Test
+    @Transactional
     void testUpdateBeerOrder() throws Exception {
         // retrieve one order from repository
         val beerOrder = beerOrderRepository.findAll().getFirst();
@@ -127,7 +127,7 @@ class BeerOrderControllerIT {
                 .build();
 
         // call updateById in controller and check status
-        mockMvc.perform(put(BeerOrderController.BEER_ORDER_PATH)
+        mockMvc.perform(put(BeerOrderController.BEER_ORDER_PATH_ID, beerOrder.getId())
                         .with(jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerOrderUpdateDTO)))

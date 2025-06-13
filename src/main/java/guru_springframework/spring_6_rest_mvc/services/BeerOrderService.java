@@ -3,6 +3,7 @@ package guru_springframework.spring_6_rest_mvc.services;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
 import guru_springframework.spring_6_rest_mvc.model.BeerOrderCreateDTO;
 import guru_springframework.spring_6_rest_mvc.model.BeerOrderDTO;
+import guru_springframework.spring_6_rest_mvc.model.BeerOrderUpdateDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
@@ -14,4 +15,6 @@ public interface BeerOrderService {
     Optional<BeerOrderDTO> getBeerOrderById(UUID id);
 
     BeerOrder saveNewBeerOrder(BeerOrderCreateDTO beerOrderCreateDTO);
+
+    BeerOrderDTO updateBeerOrderById(UUID beerOrderId, BeerOrderUpdateDTO beerOrderUpdateDTO);
 }

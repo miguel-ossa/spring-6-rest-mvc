@@ -123,4 +123,10 @@ public class BeerOrderServiceImpl implements BeerOrderService {
     public BeerOrder saveNewBeerOrder(BeerOrderCreateDTO beerOrderCreateDTO) {
         return null;
     }
+
+    @Override
+    public BeerOrderDTO updateBeerOrderById(UUID beerOrderId, BeerOrderUpdateDTO beerOrder) {
+        return null;
+    }
+
 }
