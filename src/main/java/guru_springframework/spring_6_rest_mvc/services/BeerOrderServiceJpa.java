@@ -116,6 +116,15 @@ public class BeerOrderServiceJpa implements BeerOrderService {
         return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(order));
     }
 
+    @Override
+    public boolean deleteById(UUID beerOrderId) {
+        if (beerOrderRepository.existsById(beerOrderId)) {
+            beerOrderRepository.deleteById(beerOrderId);
+            return true;
+        }
+        return false;
+    }
+
     public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
         int queryPageNumber;
         int queryPageSize;

@@ -48,4 +48,12 @@ public class BeerOrderController {
 
         return ResponseEntity.ok(beerOrderService.updateBeerOrderById(beerOrderId, beerOrderUpdateDTO));
     }
+
+    @DeleteMapping(BEER_ORDER_PATH_ID)
+    public ResponseEntity<Void> deleteById(@PathVariable(BEER_ORDER_ID) UUID beerOrderId) {
+        if (!beerOrderService.deleteById(beerOrderId)) {
+            throw new NotFoundException();
+        }
+        return ResponseEntity.noContent().build();
+    }
 }

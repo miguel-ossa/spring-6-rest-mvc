@@ -129,4 +129,9 @@ public class BeerOrderServiceImpl implements BeerOrderService {
         return null;
     }
 
+    @Override
+    public boolean deleteById(UUID beerOrderId) {
+        return false;
+    }
+
 }

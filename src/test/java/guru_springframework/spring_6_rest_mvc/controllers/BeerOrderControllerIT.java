@@ -25,9 +25,9 @@ import java.util.Set;
 import static guru_springframework.spring_6_rest_mvc.controllers.BeerOrderControllerTest.jwtRequestPostProcessor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RecordApplicationEvents
@@ -133,5 +133,22 @@ class BeerOrderControllerIT {
                         .content(objectMapper.writeValueAsString(beerOrderUpdateDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customerRef", is(customerRef)));
+    }
+
+    @Test
+    void testDeleteBeerOrder() throws Exception {
+        // retrieve one order from repository
+        val beerOrder = beerOrderRepository.findAll().getFirst();
+
+        // call deleteById in controller and check status
+        mockMvc.perform(delete(BeerOrderController.BEER_ORDER_PATH_ID, beerOrder.getId())
+                        .with(jwtRequestPostProcessor))
+                .andExpect(status().isNoContent());
+
+        assertTrue(beerOrderRepository.findById(beerOrder.getId()).isEmpty());
+
+        mockMvc.perform(delete(BeerOrderController.BEER_ORDER_PATH_ID, beerOrder.getId())
+                        .with(jwtRequestPostProcessor))
+                .andExpect(status().isNotFound());
     }
 }
