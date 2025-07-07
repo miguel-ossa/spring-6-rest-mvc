@@ -22,6 +22,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,13 +36,14 @@ import java.util.UUID;
 public class BeerOrder {
 
     public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate,
-                     String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines,
+                     String customerRef, Customer customer, BigDecimal paymentAmount, Set<BeerOrderLine> beerOrderLines,
                      BeerOrderShipment beerOrderShipment) {
         this.id = id;
         this.version = version;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
         this.customerRef = customerRef;
+        this.setPaymentAmount(paymentAmount);
         this.setCustomer(customer);
         this.setBeerOrderLines(beerOrderLines);
         this.setBeerOrderShipment(beerOrderShipment);
@@ -72,6 +74,8 @@ public class BeerOrder {
 
     @ManyToOne
     private Customer customer;
+
+    private BigDecimal paymentAmount;
 
     public void setCustomer(Customer customer) {
         if (customer != null) {
