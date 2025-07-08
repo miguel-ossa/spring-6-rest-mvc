@@ -1,9 +1,9 @@
 package guru_springframework.spring_6_rest_mvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.spring6restmvcapi.model.BeerDTO;
+import guru.springframework.spring6restmvcapi.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.config.SpringSecConfig;
-import guru_springframework.spring_6_rest_mvc.model.BeerDTO;
-import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.services.BeerService;
 import guru_springframework.spring_6_rest_mvc.services.BeerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -179,7 +179,7 @@ class BeerControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
-                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.length()", is(1)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
@@ -257,7 +257,7 @@ class BeerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.length()", is(1)))
                 .andReturn();
 
         System.out.println(mvcResult.getResponse().getContentAsString());

@@ -1,8 +1,8 @@
 package guru_springframework.spring_6_rest_mvc.mappers;
 
+import guru.springframework.spring6restmvcapi.model.BeerDTO;
 import guru_springframework.spring_6_rest_mvc.entities.Beer;
 import guru_springframework.spring_6_rest_mvc.entities.BeerAudit;
-import guru_springframework.spring_6_rest_mvc.model.BeerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

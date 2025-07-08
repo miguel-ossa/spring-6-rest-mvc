@@ -1,6 +1,6 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
-import guru_springframework.spring_6_rest_mvc.model.CustomerDTO;
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,7 +22,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName("Miguel")
                 .version(1)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         CustomerDTO customer2 = CustomerDTO.builder()
@@ -30,7 +29,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName("Antonio")
                 .version(1)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         CustomerDTO customer3 = CustomerDTO.builder()
@@ -38,7 +36,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName("Lucas")
                 .version(1)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         customerMap.put(customer1.getId(), customer1);
@@ -62,7 +59,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName(customer.getCustomerName())
                 .version(1)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         customerMap.put(savedCustomer.getId(), savedCustomer);
@@ -74,7 +70,6 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<CustomerDTO> updateCustomerById(UUID customerId, CustomerDTO customer) {
         CustomerDTO existing = customerMap.get(customerId);
         existing.setCustomerName(customer.getCustomerName());
-        existing.setEmail(customer.getEmail());
         existing.setVersion(customer.getVersion());
 
         return Optional.of(existing);

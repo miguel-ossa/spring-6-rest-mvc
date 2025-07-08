@@ -1,8 +1,8 @@
 package guru_springframework.spring_6_rest_mvc.controllers;
 
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import guru_springframework.spring_6_rest_mvc.entities.Customer;
 import guru_springframework.spring_6_rest_mvc.mappers.CustomerMapper;
-import guru_springframework.spring_6_rest_mvc.model.CustomerDTO;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerOrderRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.CustomerRepository;
 import jakarta.transaction.Transactional;

@@ -1,8 +1,8 @@
 package guru_springframework.spring_6_rest_mvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.spring6restmvcapi.model.*;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
-import guru_springframework.spring_6_rest_mvc.model.*;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerOrderRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.CustomerRepository;

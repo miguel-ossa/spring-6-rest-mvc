@@ -1,14 +1,14 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
+import guru.springframework.spring6restmvcapi.model.BeerOrderCreateDTO;
+import guru.springframework.spring6restmvcapi.model.BeerOrderDTO;
+import guru.springframework.spring6restmvcapi.model.BeerOrderUpdateDTO;
 import guru_springframework.spring_6_rest_mvc.controllers.NotFoundException;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrderLine;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrderShipment;
 import guru_springframework.spring_6_rest_mvc.entities.Customer;
 import guru_springframework.spring_6_rest_mvc.mappers.BeerOrderMapper;
-import guru_springframework.spring_6_rest_mvc.model.BeerOrderCreateDTO;
-import guru_springframework.spring_6_rest_mvc.model.BeerOrderDTO;
-import guru_springframework.spring_6_rest_mvc.model.BeerOrderUpdateDTO;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerOrderRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import guru_springframework.spring_6_rest_mvc.repositories.CustomerRepository;

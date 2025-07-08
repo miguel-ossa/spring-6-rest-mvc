@@ -1,8 +1,11 @@
 package guru_springframework.spring_6_rest_mvc.controllers;
 
+import guru.springframework.spring6restmvcapi.model.BeerOrderDTO;
 import guru_springframework.spring_6_rest_mvc.config.SpringSecConfig;
-import guru_springframework.spring_6_rest_mvc.model.BeerOrderDTO;
-import guru_springframework.spring_6_rest_mvc.services.*;
+import guru_springframework.spring_6_rest_mvc.services.BeerOrderService;
+import guru_springframework.spring_6_rest_mvc.services.BeerOrderServiceImpl;
+import guru_springframework.spring_6_rest_mvc.services.BeerServiceImpl;
+import guru_springframework.spring_6_rest_mvc.services.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

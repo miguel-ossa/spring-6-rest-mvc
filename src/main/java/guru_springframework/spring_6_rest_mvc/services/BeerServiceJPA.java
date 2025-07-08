@@ -1,13 +1,13 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
+import guru.springframework.spring6restmvcapi.model.BeerDTO;
+import guru.springframework.spring6restmvcapi.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.entities.Beer;
 import guru_springframework.spring_6_rest_mvc.events.BeerCreatedEvent;
 import guru_springframework.spring_6_rest_mvc.events.BeerDeletedEvent;
 import guru_springframework.spring_6_rest_mvc.events.BeerPatchedEvent;
 import guru_springframework.spring_6_rest_mvc.events.BeerUpdatedEvent;
 import guru_springframework.spring_6_rest_mvc.mappers.BeerMapper;
-import guru_springframework.spring_6_rest_mvc.model.BeerDTO;
-import guru_springframework.spring_6_rest_mvc.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

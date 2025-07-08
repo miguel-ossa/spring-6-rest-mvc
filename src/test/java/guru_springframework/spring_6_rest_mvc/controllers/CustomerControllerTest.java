@@ -1,8 +1,8 @@
 package guru_springframework.spring_6_rest_mvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.spring6restmvcapi.model.CustomerDTO;
 import guru_springframework.spring_6_rest_mvc.config.SpringSecConfig;
-import guru_springframework.spring_6_rest_mvc.model.CustomerDTO;
 import guru_springframework.spring_6_rest_mvc.services.CustomerService;
 import guru_springframework.spring_6_rest_mvc.services.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;

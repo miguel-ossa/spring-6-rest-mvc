@@ -1,7 +1,7 @@
 package guru_springframework.spring_6_rest_mvc.services;
 
+import guru.springframework.spring6restmvcapi.model.*;
 import guru_springframework.spring_6_rest_mvc.entities.BeerOrder;
-import guru_springframework.spring_6_rest_mvc.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -51,7 +51,6 @@ public class BeerOrderServiceImpl implements BeerOrderService {
                 .customerName("Miguel")
                 .version(1)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         CustomerDTO customer2 = CustomerDTO.builder()
@@ -59,7 +58,6 @@ public class BeerOrderServiceImpl implements BeerOrderService {
                 .customerName("Pepe")
                 .version(1)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
                 .build();
 
         BeerOrderDTO order1 =  BeerOrderDTO.builder()
