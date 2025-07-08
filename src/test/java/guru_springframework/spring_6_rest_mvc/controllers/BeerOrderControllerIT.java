@@ -89,7 +89,6 @@ class BeerOrderControllerIT {
                 .beerOrderLines(Set.of(BeerOrderLineCreateDTO.builder()
                         .beerId(beer.getId())
                         .orderQuantity(1)
-                        .quantityAllocated(1)
                         .build()))
                 .build();
 
