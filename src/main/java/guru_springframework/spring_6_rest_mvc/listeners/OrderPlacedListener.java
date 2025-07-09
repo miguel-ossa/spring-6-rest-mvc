@@ -1,7 +1,7 @@
 package guru_springframework.spring_6_rest_mvc.listeners;
 
 import guru.springframework.spring6restmvcapi.events.OrderPlacedEvent;
-import guru_springframework.spring_6_rest_mvc.config.kafkaConfig;
+import guru_springframework.spring_6_rest_mvc.config.KafkaConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -22,6 +22,6 @@ public class OrderPlacedListener {
 
         log.debug("Order Placed Event Received");
 
-        kafkaTemplate.send(kafkaConfig.ORDER_PLACED_TOPIC, event);
+        kafkaTemplate.send(KafkaConfig.ORDER_PLACED_TOPIC, event);
     }
 }
