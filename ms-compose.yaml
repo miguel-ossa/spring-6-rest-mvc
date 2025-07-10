@@ -3,6 +3,7 @@ services:
   mysql:
     container_name: mysql
     image: mysql:8
+    platform: linux/amd64
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: restdb
@@ -48,11 +49,15 @@ services:
   auth-server:
     container_name: auth-server
     image: spring-6-auth-server:0.0.1-SNAPSHOT
+    platform: linux/amd64
     expose:
       - 9000
+    ports:
+      - 9000:9000
   rest-mvc:
     container_name: rest-mvc
     image: spring-6-rest-mvc:0.0.1-SNAPSHOT
+    platform: linux/amd64
     expose:
       - 8080
     environment:
@@ -67,19 +72,21 @@ services:
   gateway:
     container_name: gateway
     image: spring-6-gateway:0.0.1-SNAPSHOT
+    platform: linux/amd64
     expose:
       - 8080
     ports:
       - 8080:8080
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://auth-server:9000
+#      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://auth-server:9000
     depends_on:
       - auth-server
       - rest-mvc
   cold-service:
     container_name: cold-service
     image: spring-6-cold-service:0.0.1-SNAPSHOT
+    platform: linux/amd64
     expose:
       - 8080
     environment:
@@ -89,6 +96,7 @@ services:
   cool-service:
     container_name: cool-service
     image: spring-6-cool-service:0.0.1-SNAPSHOT
+    platform: linux/amd64
     expose:
       - 8080
     environment:
@@ -98,6 +106,7 @@ services:
   icecold-service:
     container_name: icecold-service
     image: spring-6-icecold-service:0.0.1-SNAPSHOT
+    platform: linux/amd64
     expose:
       - 8080
     environment:
