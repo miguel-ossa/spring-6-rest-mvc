@@ -34,6 +34,10 @@ public class DrinkSplitterRouter {
                     log.debug("Splitting LAGER Order");
                     sendIceColdBeer(beerOrderLine);
                     break;
+                case PILSNER:
+                    log.debug("Splitting PILSNER Order");
+                    sendIceColdBeer(beerOrderLine);
+                    break;
                 case STOUT:
                     log.debug("Splitting STOUT Order");
                     sendCoolBeer(beerOrderLine);
@@ -72,6 +76,7 @@ public class DrinkSplitterRouter {
 
     private void sendIceColdBeer(BeerOrderLineDTO beerOrderLineDTO) {
         // send ice cold beer
+        log.debug("Sending Ice Cold Beer Request");
         kafkaTemplate.send(KafkaConfig.DRINK_REQUEST_ICE_COLD_TOPIC, DrinkRequestEvent.builder()
                 .beerOrderLineDTO(beerOrderLineDTO)
                 .build());
@@ -79,6 +84,7 @@ public class DrinkSplitterRouter {
 
     private void sendColdBeer(BeerOrderLineDTO beerOrderLineDTO) {
         // send cold beer
+        log.debug("Sending Cold Beer Request");
         kafkaTemplate.send(KafkaConfig.DRINK_REQUEST_COLD_TOPIC, DrinkRequestEvent.builder()
                 .beerOrderLineDTO(beerOrderLineDTO)
                 .build());
@@ -86,7 +92,9 @@ public class DrinkSplitterRouter {
 
     private void sendCoolBeer(BeerOrderLineDTO beerOrderLineDTO) {
         // send cool beer
+        log.debug("Sending Cool Beer Request");
         kafkaTemplate.send(KafkaConfig.DRINK_REQUEST_COOL_TOPIC, DrinkRequestEvent.builder()
                 .beerOrderLineDTO(beerOrderLineDTO)
                 .build());
-    }}
+    }
+}

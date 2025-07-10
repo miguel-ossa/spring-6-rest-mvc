@@ -65,6 +65,7 @@ public class BeerOrderServiceJpa implements BeerOrderService {
 
     @Override
     public BeerOrder saveNewBeerOrder(BeerOrderCreateDTO beerOrderCreateDTO) {
+        log.debug("Creating Order for Customer ID: {}", beerOrderCreateDTO.getCustomerId());
         Customer customer = customerRepository.findById(beerOrderCreateDTO.getCustomerId())
                 .orElseThrow(NotFoundException::new);
 
@@ -118,9 +119,12 @@ public class BeerOrderServiceJpa implements BeerOrderService {
 
         BeerOrderDTO dto = beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepository.save(order));
 
+        log.debug("Payment Amount: " + beerOrderUpdateDTO.getPaymentAmount());
+
         if (beerOrderUpdateDTO.getPaymentAmount() != null) {
+            log.debug("Sending Order Update Event for Order ID: " + beerOrderId);
             applicationEventPublisher.publishEvent(OrderPlacedEvent.builder()
-                    .beerOrderDTO(dto));
+                    .beerOrderDTO(dto).build());
         }
 
         return dto;
