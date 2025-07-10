@@ -6,6 +6,7 @@ import guru.springframework.spring6restmvcapi.model.BeerOrderDTO;
 import guru.springframework.spring6restmvcapi.model.BeerOrderLineDTO;
 import guru.springframework.spring6restmvcapi.model.BeerStyle;
 import guru_springframework.spring_6_rest_mvc.config.KafkaConfig;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
 @EmbeddedKafka(controlledShutdown = true, topics = {KafkaConfig.ORDER_PLACED_TOPIC}, partitions = 1, kraft = true)
@@ -47,9 +47,7 @@ class OrderPlacedListenerTest {
     @BeforeEach
     void Setup() {
         kafkaListenerEndpointRegistry.getListenerContainers()
-                .forEach(container -> {
-                    ContainerTestUtils.waitForAssignment(container, 1);
-                });
+                .forEach(container -> ContainerTestUtils.waitForAssignment(container, 1));
     }
 
     @Test
@@ -78,9 +76,7 @@ class OrderPlacedListenerTest {
         orderPlacedListener.listen(orderPlacedEvent);
 
         await().atMost(5, TimeUnit.SECONDS)
-                .untilAsserted(() -> {
-                    assertEquals(1, orderPlacedKafkaListener.messageCounter.get());
-                });
+                .untilAsserted(() -> Assertions.assertEquals(1, orderPlacedKafkaListener.messageCounter.get()));
     }
 
     BeerOrderDTO buildOrder() {
