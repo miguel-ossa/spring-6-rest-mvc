@@ -59,7 +59,7 @@ services:
     expose:
       - 9000
     ports:
-      - 9000:9000
+      - "9000:9000"
   rest-mvc:
     container_name: rest-mvc
     image: spring-6-rest-mvc:0.0.1-SNAPSHOT
@@ -82,7 +82,7 @@ services:
     expose:
       - 8080
     ports:
-      - 8080:8080
+      - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
 #      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://auth-server:9000
